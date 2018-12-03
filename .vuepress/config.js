@@ -35,7 +35,7 @@ module.exports = {
         {
           title: '操作手册',
           collapsable: false,
-          children: ['', 'login', 'manual_check', 'abnormal_prod']
+          children: ['', 'main', 'new']
         }
       ]
     }
