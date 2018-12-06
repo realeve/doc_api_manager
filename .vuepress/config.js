@@ -5,7 +5,11 @@ module.exports = {
   markdown: {
     lineNumbers: true
   },
-  plugins: ['@vuepress/active-header-links','@vuepress/medium-zoom','@vuepress/back-to-top'] ,
+  plugins: [
+    '@vuepress/active-header-links',
+    '@vuepress/medium-zoom',
+    '@vuepress/back-to-top'
+  ],
   themeConfig: {
     repo: 'realeve/api_manager',
     repoLabel: '查看源码',
@@ -29,14 +33,14 @@ module.exports = {
         link: 'http://localhost:90/public/'
       }
     ],
-    search: false,
+    search: true,
     searchMaxSuggestions: 10,
     sidebar: {
       '/guide/': [
         {
           title: '操作手册',
           collapsable: false,
-          children: ['', 'main', 'new']
+          children: ['', 'main', 'new', 'crud', 'standard', 'axios']
         }
       ]
     }
