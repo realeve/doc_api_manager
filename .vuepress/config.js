@@ -5,6 +5,7 @@ module.exports = {
   markdown: {
     lineNumbers: true
   },
+  plugins: ['@vuepress/active-header-links','@vuepress/medium-zoom','@vuepress/back-to-top'] ,
   themeConfig: {
     repo: 'realeve/api_manager',
     repoLabel: '查看源码',
