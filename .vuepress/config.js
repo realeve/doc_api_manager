@@ -1,3 +1,6 @@
+const dev = true;
+const sysLink = dev ? 'http://localhost:90/public/' : 'http://10.8.1.25:100';
+
 module.exports = {
   title: '数据接口开放平台',
   description:
@@ -30,7 +33,7 @@ module.exports = {
       },
       {
         text: '进入系统',
-        link: 'http://localhost:90/public/'
+        link: sysLink
       }
     ],
     search: true,
