@@ -99,6 +99,34 @@ let submitData: () => void = async () => {
 };
 ```
 
+## 防止 SQL 注入
+
+::: danger SQL 注入
+在数据写入/修改中，由于是拼接字符串，会存在 SQL 注入的风险。
+:::
+例如，开发者想更新这样的信息：
+
+```sql
+update tblSample set status = 3 where user_type = 'guest'
+```
+
+但如果接口调用者在传参数时，如果参数 user_type = "guest' or 1 = 1 or '1 = 1",后台拼接结果将变为：
+
+```sql
+update tblSample set status = 3 where user_type = 'guest' or 1 = 1 or '1 = 1';
+```
+
+此时更新会将所有数据更新。为此，如果在前台提交危险的字符，后端将会强制转义，以上场景将被转换为：
+
+```sql
+update tblSample set status = 3 where user_type = 'guest\' or 1 = 1 or \'1 = 1';
+```
+
+处理后， 数据更新将失败。
+::: tip
+经过以上的处理，在内网中的安全能够得到保障。
+:::
+
 ## 系统保留参数
 
 我们注意到，系统将自动以 id 以及 nonce 作为保留参数调用接口，除此之外还有以下接口用在各类场景中：

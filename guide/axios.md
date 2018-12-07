@@ -1,10 +1,10 @@
 # 最佳实践
 
-在系统给出的默认调用代码中，对于前台、小程序都给出了 axios 这一函数，但 axios 官方文档中的数据返回结果与我们此前的数据约定并不一致。
+在系统给出的默认调用代码中，对于前台、小程序都给出了 axios 这一函数，但 axios 官方文档中的数据返回结果与我们此前的数据约定并不一致。现在我们将前后台分离的开发中遇到的各类问题的解决方案总结如下。
 
-## 原生 axios 调用
+## 原生 axios
 
-默认数据结构定义如下：
+假设默认返回数据结构定义如下：
 
 ```ts
 type TItem = {
@@ -40,9 +40,9 @@ const handleData = async () => {
 };
 ```
 
-在原生 axios 调用中，需要指定 API 地址，同时返回数据需要返回数据的 data 部分才是我们约定的数据。此处还未处理读取报错的场景，在实际使用中我们可以这样封装。
+[在原生 axios 调用](https://www.npmjs.com/package/axios)中，需要指定 API 地址，同时返回数据需要返回数据的 data 部分才是我们约定的数据。此处还未处理读取报错的场景，在实际使用中我们可以做以下的封装。
 
-## web 端封装 axios
+## web 端
 
 ```ts
 // ./lib/setting.js
@@ -90,7 +90,7 @@ let getType: (data: any) => string = (data) =>
 
 export let axios = async (option) => {
   option = Object.assign(option, {
-    method: option.method ? option.method : 'get'
+    method: option.method || 'get'
   });
 
   return await http
@@ -128,6 +128,7 @@ export let axios = async (option) => {
           router.push('/404');
         }
 
+        // 全局弹出请求错误提示
         const errortext = (codeMessage[status] || '') + data.errmsg;
         notification.error({
           message: `请求错误 ${status}: ${error.config.url}`,
@@ -163,6 +164,7 @@ export const getSysDept = () =>
 业务逻辑
 
 ```ts
+// 将变量名定义为db，表示与数据库读写数据
 import * as db from './db';
 async function readData() {
   let res: ApiSchema = await db.getSysDept();
@@ -170,7 +172,7 @@ async function readData() {
 }
 ```
 
-## 微信小程序调用
+## 微信小程序
 
 以 wepy 框架为例：
 
@@ -233,7 +235,6 @@ export const getPabUserlist = (openid) =>
 // axios.js
 let http = require('axios');
 let qs = require('qs');
-let fs = require('fs');
 
 let dev = false;
 
@@ -250,7 +251,7 @@ let getType = (data) =>
 // 自动处理token更新，data 序列化等
 let axios = async (option) => {
   option = Object.assign(option, {
-    method: option.method ? option.method : 'get'
+    method: option.method || 'get'
   });
 
   return await http
@@ -284,3 +285,69 @@ module.exports = {
   dev
 };
 ```
+
+## 中台应用
+
+::: warning 有了 web 调用为什么还需要 nodejs 端？
+为了保持后台的通用性，我们做了许多约定确保满足大部分应用场景。但有的数据接口需要调用大量不同数据库的接口，并且包含复杂的逻辑处理（例如自动排产），这时只有前台/后台还不能满足需要，此时需要引入中台。
+:::
+
+为方便说明，我们将系统间的数据流向设计如下：
+
+```
+                                     ┏━━━━━━━━━━━━━━━━━> 后台接口 1 ━━━━━> 数据库 1
+                                     ┣━━━━━━━━━━━━━━━━━> 后台接口 2 ━━━━━> 数据库 2
+前台 web ━━━━━━> 中台 Node.js 调用接口并处理业务逻辑 ━━━━━> 后台接口 3 ━━━━━> 数据库 3
+                                     ┣━━━━━━━━━━━━━━━━━> 后台接口 4 ━━━━━> 数据库 4
+                                     ┗━━━━━━━━━━━━━━━━━> 后台接口 5 ━━━━━> 数据库 5
+```
+
+此时，平台向 node 提供基础数据调用，Node.js 专注于接口间的逻辑处理并输出新的接口，而与数据库打交道的部分由平台完成。
+
+## 数据离线 Mock
+
+假设我们需要在离线开发模式调试线上的接口:
+
+```ts
+import { axios, dev } from '@/lib/axios';
+/**
+ *   @database: { 接口管理 }
+ *   @desc:     { 部门列表 }
+ */
+export const getSysDept = () =>
+  axios({
+    url: '/27/9b520a55df.json'
+  });
+```
+
+此时可以将数据内容存储为 mock 目录下的文件 _9b520a55df.json_ 如下：
+
+```json
+{
+  "data": [{ "id": 1, "value": "某部门" }, { "id": 2, "value": "部门2" }],
+  "rows": 2,
+  "ip": "0.0.0.0",
+  "header": ["id", "value"],
+  "title": "部门列表",
+  "time": "10.554ms",
+  "source": "数据来源：接口管理"
+}
+```
+
+此时手工将接口调用文件改为以下文件：
+
+```ts
+import { axios, dev } from '@/lib/axios';
+/**
+ *   @database: { 接口管理 }
+ *   @desc:     { 部门列表 }
+ */
+export const getSysDept = () =>
+  dev
+    ? require('./mock/9b520a55df.json')
+    : axios({
+        url: '/27/9b520a55df.json'
+      });
+```
+
+当为开发模式时，确保让 dev 设置为 true，这样便可保证线上环境不连通的情况下，正常测试开发了。
