@@ -123,7 +123,7 @@ update tblSample set status = 3 where user_type = 'guest\' or 1 = 1 or \'1 = 1';
 ```
 
 处理后， 数据更新将失败。
-::: tip
+::: tip 内网使用
 经过以上的处理，在内网中的安全能够得到保障。
 :::
 

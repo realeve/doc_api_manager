@@ -54,7 +54,7 @@ export const getSampleFakeType = (type) =>
 
 此处以 axios 调用为例，展示了前台 get 方法调用接口的示例代码，此处已将数据库中的表单 _tbl_sample_fake_type_ 自动转为 _getSampleFakeType。_
 
-::: tip
+::: tip 请求方式
 get 调用代码由系统默认复制到剪贴板中，点击按钮后可直接粘贴到前台。在默认的 get 方式调用中，适用于请求的参数不大的情况，如果需要一次性发送较大量的数据，建议使用 POST 模式。另外，默认的 get 方式除了适用于 web 开发外，微信小程序也同样适用。
 :::
 
@@ -208,7 +208,7 @@ interface ApiSchema {
 
 ### rows
 
-::: tip
+::: tip 返回状态
 常见的接口设计中，会加入 status 字段表示状态，如 200 表示成功，401 表示认证失败。在本次接口设计中，我们通过返回端的 status 直接显示返回状态，这也与 http 的设计理念一致。
 :::
 

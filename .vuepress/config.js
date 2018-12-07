@@ -45,6 +45,13 @@ module.exports = {
           collapsable: false,
           children: ['', 'main', 'new', 'crud', 'standard', 'axios']
         }
+      ],
+      '/advance/': [
+        {
+          title: '进阶手册',
+          collapsable: false,
+          children: ['deploy']
+        }
       ]
     }
   }
