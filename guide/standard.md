@@ -141,30 +141,46 @@ update tblSample set status = 3 where user_type = 'guest\' or 1 = 1 or \'1 = 1';
 - blob: 指定哪个字段是二进制数据，可以指定为多个，如 _blob[]=ErrImage1&blob[]=ErrImage2&blob[]=ErrImage3_
 - blob*type: 指定二进制字段的数据类型，自动在前面补上 base64 描述信息，可传字段如：jpg,png,bmp 等，如 *&blob[]=ErrImage1&blob[]=ErrImage2&blob[]=ErrImage3&date*type=jpg*,其输出将自动在 base64 数据前补上前缀。
 
-大多数时候，这一列表中前面的参数无需使用，系统支持下列模式(摘自接口管理页面)：
+## 数据请求方式
+
+大多数时候，默认参数无需使用，系统直接支持下列场景：
 
 > 默认参数，cache[缓存]0,mode[数据格式]json：
 >
 > http://localhost:90/api/?id=51&nonce=65b5c14441&cache=0&mode=json&data_type=json
->
+
+### 1. 使用 json 后缀，5 分钟缓存
+
 > http://localhost:90/api/51/65b5c14441.json?cache=5
 
-> url 第三段为数值时表示缓存，默认 json，需要返回数组时加 mode 参数
->
+### 2. 5 分钟缓存，更换后缀，以数组结构输出数据
+
+url 第三段为数值时表示缓存，默认 json，需要返回数组时加 mode 参数
+
 > http://localhost:90/api/51/65b5c14441/5.html?mode=array
 >
 > http://localhost:90/api/51/65b5c14441/5.html
 
-> url 后缀表示数据类型:设为 xml 时以 xml 返回，否则以 json 返回，设为 array 时 json 数据项将转换为数组而非对象。后缀也可设为.html,.jpg，默认以 json 的形式输出：
->
+### 3. 不带后缀默认 json 输出
+
+url 后缀表示数据类型:设为 xml 时以 xml 返回，否则以 json 返回，设为 array 时 json 数据项将转换为数组而非对象。后缀也可设为.html,.jpg，默认以 json 的形式输出：
+
 > http://localhost:90/api/51/65b5c14441
->
+
+### 4. json 后缀
+
 > http://localhost:90/api/51/65b5c14441.json
->
+
+### 5. 以数组形式输出
+
 > http://localhost:90/api/51/65b5c14441.array
->
+
+### 6. 输出 xml
+
 > http://localhost:90/api/51/65b5c14441.xml
->
+
+### 7. 其它任意形式的后缀
+
 > http://localhost:90/api/51/65b5c14441.html
 >
 > http://localhost:90/api/51/65b5c14441.jpg
