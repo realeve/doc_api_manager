@@ -1,7 +1,8 @@
-const dev = true;
+const dev = false;
 const sysLink = dev ? 'http://localhost:90/public/' : 'http://10.8.1.25:100';
 
 module.exports = {
+  base: '/doc/',
   title: '数据接口开放平台',
   description:
     '整合SQLServer、MySql、ORACLE三大关系型数据库，抹平数据后端差异。',
