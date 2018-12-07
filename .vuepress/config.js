@@ -51,7 +51,7 @@ module.exports = {
         {
           title: '进阶手册',
           collapsable: false,
-          children: ['', 'config']
+          children: ['', 'config', 'whitelist', 'jwt', 'cache', 'tip']
         }
       ]
     }

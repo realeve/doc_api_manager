@@ -206,6 +206,10 @@ interface ApiSchema {
 - time：表示接口响应时间，用于调试
 - source：表示接口读取自哪个数据库；
 
+::: tip 通用接口-获取用户 ip
+http://localhost/api/ip
+:::
+
 ### rows
 
 ::: tip 返回状态
