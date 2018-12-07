@@ -13,7 +13,7 @@ module.exports = {
     '@vuepress/active-header-links',
     '@vuepress/medium-zoom',
     '@vuepress/back-to-top',
-    '@vuepress/blog'
+    '@vuepress/pwa'
   ],
   themeConfig: {
     repo: 'realeve/api_manager',
