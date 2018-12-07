@@ -11,7 +11,8 @@ module.exports = {
   plugins: [
     '@vuepress/active-header-links',
     '@vuepress/medium-zoom',
-    '@vuepress/back-to-top'
+    '@vuepress/back-to-top',
+    '@vuepress/blog'
   ],
   themeConfig: {
     repo: 'realeve/api_manager',
@@ -50,7 +51,7 @@ module.exports = {
         {
           title: '进阶手册',
           collapsable: false,
-          children: ['deploy']
+          children: ['', 'config']
         }
       ]
     }
