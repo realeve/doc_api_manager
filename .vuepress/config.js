@@ -45,7 +45,7 @@ module.exports = {
         {
           title: '操作手册',
           collapsable: false,
-          children: ['', 'main', 'new', 'crud', 'standard', 'axios']
+          children: ['', 'main', 'new', 'crud', 'standard', 'axios', 'mock']
         }
       ],
       '/advance/': [
