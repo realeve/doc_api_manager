@@ -68,7 +68,7 @@ import { axios, DEV, mock, _commonData } from '@/utils/axios';
 */
 export const getVCbpcCartlist = (params) =>
   DEV
-    ? mock('@/mock/355_aa81563201.json')
+    ? mock(require('@/mock/355_aa81563201.json'))
     : axios({
         url: '/355/aa81563201.json',
         params
@@ -87,12 +87,12 @@ export const getVCbpcCartlist = (params) =>
 
 ```js
 // 导出数据，随机时长
-export type MockFn = <T>(path: string | T, time: number) => Promise<T>;
+export type MockFn = <T>(T, time: number) => Promise<T>;
 
 export const mock: MockFn = (path, time = Math.random() * 2000) =>
   new Promise((resolve) => {
     setTimeout(() => {
-      resolve(typeof path === 'string' ? require(path) : path);
+      resolve(path);
     }, time);
   });
 ```
